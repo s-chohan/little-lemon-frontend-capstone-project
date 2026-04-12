@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Little Lemon — Meta Front-End Developer Capstone Project
+
+This repository contains the Little Lemon restaurant landing page and reservation flow built as part of the Meta Front-End Developer Capstone course on Coursera.
+
+The app is built with Next.js, React, TypeScript, and Tailwind CSS.
+
+## Features
+
+- Responsive landing page with sections for About, Menu, Testimonials, and Contact
+- Reservation page with a client-side validated booking form
+- Open Graph metadata for social sharing and mobile-friendly viewport support
+- Accessible form feedback and validation states
+- Unit tests for validation logic and form behavior
 
 ## Getting Started
 
-First, run the development server:
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+### Run tests
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Run tests in watch mode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run test:watch
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `app/` — Next.js routes and pages
+- `app/components/` — reusable UI components
+- `app/components/ReservationForm.utils.ts` — shared form validation helper
+- `app/components/ReservationForm.test.tsx` — unit tests for the reservation form
+- `vitest.config.ts` — test runner configuration
+- `test/setup.ts` — test setup for jest-dom matchers
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+This project follows the requirements of the Meta Front-End Developer Capstone course and includes responsive styling, SEO-friendly metadata, and client-side form validation.

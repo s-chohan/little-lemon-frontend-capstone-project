@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { FormData, FormErrors, validateForm } from './ReservationForm.utils';
 
 export default function ReservationForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -11,22 +12,33 @@ export default function ReservationForm() {
     date: '',
     time: '',
     guests: '2',
-    specialRequests: ''
+    specialRequests: '',
+    acceptedTerms: false,
   });
 
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
+    const validationErrors = validateForm(formData);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
     console.log('Reservation submitted:', formData);
     setIsSubmitted(true);
   };
@@ -61,7 +73,13 @@ export default function ReservationForm() {
           Reserve your table at Little Lemon and enjoy an authentic Mediterranean dining experience.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+          {Object.keys(errors).length > 0 ? (
+            <div className="rounded-md bg-red-50 border border-red-200 p-4 text-sm text-red-700" role="alert" aria-live="assertive">
+              Please fix the highlighted fields before submitting.
+            </div>
+          ) : null}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -76,7 +94,11 @@ export default function ReservationForm() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 placeholder="Enter your first name"
+                aria-invalid={Boolean(errors.firstName)}
               />
+              {errors.firstName ? (
+                <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>
+              ) : null}
             </div>
 
             <div>
@@ -92,7 +114,11 @@ export default function ReservationForm() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 placeholder="Enter your last name"
+                aria-invalid={Boolean(errors.lastName)}
               />
+              {errors.lastName ? (
+                <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>
+              ) : null}
             </div>
           </div>
 
@@ -110,7 +136,11 @@ export default function ReservationForm() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 placeholder="your.email@example.com"
+                aria-invalid={Boolean(errors.email)}
               />
+              {errors.email ? (
+                <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+              ) : null}
             </div>
 
             <div>
@@ -126,7 +156,11 @@ export default function ReservationForm() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 placeholder="(555) 123-4567"
+                aria-invalid={Boolean(errors.phone)}
               />
+              {errors.phone ? (
+                <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
+              ) : null}
             </div>
           </div>
 
@@ -144,7 +178,11 @@ export default function ReservationForm() {
                 onChange={handleChange}
                 min={new Date().toISOString().split('T')[0]}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                aria-invalid={Boolean(errors.date)}
               />
+              {errors.date ? (
+                <p className="text-sm text-red-600 mt-1">{errors.date}</p>
+              ) : null}
             </div>
 
             <div>
@@ -158,6 +196,7 @@ export default function ReservationForm() {
                 value={formData.time}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                aria-invalid={Boolean(errors.time)}
               >
                 <option value="">Select time</option>
                 <option value="17:00">5:00 PM</option>
@@ -170,6 +209,9 @@ export default function ReservationForm() {
                 <option value="20:30">8:30 PM</option>
                 <option value="21:00">9:00 PM</option>
               </select>
+              {errors.time ? (
+                <p className="text-sm text-red-600 mt-1">{errors.time}</p>
+              ) : null}
             </div>
 
             <div>
@@ -183,6 +225,7 @@ export default function ReservationForm() {
                 value={formData.guests}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                aria-invalid={Boolean(errors.guests)}
               >
                 <option value="1">1 Guest</option>
                 <option value="2">2 Guests</option>
@@ -193,6 +236,9 @@ export default function ReservationForm() {
                 <option value="7">7 Guests</option>
                 <option value="8">8+ Guests</option>
               </select>
+              {errors.guests ? (
+                <p className="text-sm text-red-600 mt-1">{errors.guests}</p>
+              ) : null}
             </div>
           </div>
 
@@ -211,17 +257,23 @@ export default function ReservationForm() {
             />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-start gap-2">
             <input
               type="checkbox"
-              id="terms"
-              required
-              className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
+              id="acceptedTerms"
+              name="acceptedTerms"
+              checked={formData.acceptedTerms}
+              onChange={handleChange}
+              className="mt-1 h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
+              aria-invalid={Boolean(errors.acceptedTerms)}
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+            <label htmlFor="acceptedTerms" className="text-sm text-gray-700">
               I agree to the restaurant&apos;s cancellation policy and terms of service *
             </label>
           </div>
+          {errors.acceptedTerms ? (
+            <p className="text-sm text-red-600 mt-1">{errors.acceptedTerms}</p>
+          ) : null}
 
           <button
             type="submit"

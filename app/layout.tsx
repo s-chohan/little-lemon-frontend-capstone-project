@@ -15,6 +15,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Little Lemon - Chicago Restaurant",
   description: "Experience authentic Mediterranean cuisine at Little Lemon, a family-owned restaurant in Chicago.",
+  viewport: "width=device-width, initial-scale=1",
+  metadataBase: new URL("https://little-lemon.example.com"),
+  openGraph: {
+    title: "Little Lemon - Chicago Restaurant",
+    description: "Experience authentic Mediterranean cuisine at Little Lemon, a family-owned restaurant in Chicago.",
+    type: "website",
+    url: "/",
+    siteName: "Little Lemon",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Little Lemon - Chicago Restaurant",
+    description: "Experience authentic Mediterranean cuisine at Little Lemon, a family-owned restaurant in Chicago.",
+  },
 };
 
 export default function RootLayout({
